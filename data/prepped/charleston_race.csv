@@ -1,4 +1,4 @@
-"GEOID","GEO.display.label","pop","pop.white","pop.not.white","pct.white","pct.not.white"
+"GEOID","GEO.display.label","total_pop","pop_white","pop_not_white","pct_white","pct_not_white"
 "45001950100","Census Tract 9501, Abbeville County, South Carolina",3171,2749,422,0.866918953011668,0.133081046988332
 "45001950200","Census Tract 9502, Abbeville County, South Carolina",4213,3066,1147,0.72774744837408,0.27225255162592
 "45001950300","Census Tract 9503, Abbeville County, South Carolina",3218,3028,190,0.940957116221255,0.0590428837787446

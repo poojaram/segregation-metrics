@@ -1,4 +1,4 @@
-"GEOID","GEO.display.label","pop","pop.white","pop.not.white","pct.white","pct.not.white"
+"GEOID","GEO.display.label","total_pop","pop_white","pop_not_white","pct_white","pct_not_white"
 "24510010100","Census Tract 101, Baltimore city, Maryland",1378,1276,102,0.925979680696662,0.0740203193033382
 "24510010200","Census Tract 102, Baltimore city, Maryland",1262,1082,180,0.857369255150555,0.142630744849445
 "24510010300","Census Tract 103, Baltimore city, Maryland",965,847,118,0.877720207253886,0.122279792746114

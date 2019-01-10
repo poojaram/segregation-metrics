@@ -1,4 +1,4 @@
-"GEOID","GEO.display.label","pop","pop.white","pop.not.white","pct.white","pct.not.white"
+"GEOID","GEO.display.label","total_pop","pop_white","pop_not_white","pct_white","pct_not_white"
 "47001020100","Census Tract 201, Anderson County, Tennessee",3530,2106,1424,0.596600566572238,0.403399433427762
 "47001020201","Census Tract 202.01, Anderson County, Tennessee",3642,2885,757,0.79214717188358,0.20785282811642
 "47001020202","Census Tract 202.02, Anderson County, Tennessee",4254,3699,555,0.869534555712271,0.130465444287729
