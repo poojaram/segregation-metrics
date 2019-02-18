@@ -1,0 +1,230 @@
+---
+title: "Segregation Metrics"
+author: "Pooja Shree Ramanathan"
+date: "INFO 370 A2"
+output:
+  prettydoc::html_pretty:
+    theme: cayman
+    highlight: github
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source('analysis.R')
+library('ggplot2')
+```
+
+# Abstract
+In this report I investigated the levels of segregation in 14 cities in the United States using three metrics of segregation defined by the U.S. Census Bureau. These metrics have been computed for each of the 14 cities individually and compared against each other.
+
+# Metrics Definition
+
+The following metrics have been used to compare the levels of segregation in the chosen 14 cities: 
+
+1. **Interaction Index**
+2. **Isolation Index**
+3. **Dissimilarity Index**
+
+As defined by the US Census Bureau, the Interaction Index and Isolation Index fall under the dimension - Measure of Exposure. This dimension, as it is named, aims to measure the exposure between the minority and majority group of the population. This includes the chances of possible contact or interaction between the majority and minority group members. To measure this we rely upon the common residential areas shared by the two groups and hence, on the degree to which the average minority group member experiences segregation.
+
+The values of interaction and isolation index range from 0.0 - 1.0 . In this case, since we are only considering two groups - (White and non white) - the interaction and isolation indices should sum up to a value of 1.0
+
+> Remark: Measures of exposure __depends__ upon the sizes of the two groups being compared
+
+Now we explore each metric mentioned above in detail:
+
+## Interaction Index
+Let: 
+$$x_i = number~of~Blacks~in~the~area$$
+$$X = total~number~of~Blakcs $$
+$$y_i = number~of~whites~in~the~area$$
+$$t_i = total~population~of~the~area$$
+Then, *Interaction Index* is computed using the following formula:
+
+$$\sum_{i=1}^{n}\left[\left( \frac{x_i}{X} \right)\left( \frac{y_i}{t_i} \right)  \right]$$
+
+The interaction Index defines the probability that that a minority person shares a unit area with a majority person. This basically means that the more the chances of a minority person to share common space/area with a majority person, the higher are the chances of interaction and communication. 
+
+Take for instance the interaction index for a unit area in a city is equal to **X**. This essentially means that the probability of a non-white person 'interacting' with a white person is about **X %**. In other words, X out 100 people a non-white person meets will be a white person. 
+
+Generally speaking, the value of this index will be highest when the two groups have equal numbers and are spread evenly among tracts.
+
+## Isolation Index
+Let:
+$$x_i = number~of~Blacks~in~the~area$$
+
+$$X = total~number~of~Blakcs $$
+
+$$t_i = total~population~of~the~area$$
+
+Then, *Isolation Index* is computed using the following formula:
+
+$$\sum_{i=1}^{n}\left[\left( \frac{x_i}{X} \right)\left( \frac{x_i}{t_i} \right)  \right]$$
+
+The isolation index measures 'the extent to which minority members are exposed only to one another,' (Massey and Denton, p. 288) and is computed as the minority-weighted average of the minority proportion in each area. 
+ 
+We could also calculate the isolation index as 1 - interaction index. This gives us a better understanding of what the isolation index means, ie. the chances of a minority person to interact only with another minority member in that area. 
+ 
+## Dissimilarity Index
+Let:
+$$P = ratio~of~X~to~T$$
+$$T = Total~Population $$
+$$X = Total~minority~Population$$
+Then, *Dissimilarity Index* is computed using the following formula:
+
+$$\frac {\sum_{i=1}^{n}\left[ t_i \lvert \left( p_i - P \right) \rvert  \right]} {\left[ 2TP \left( 1 - P \right) \right]}$$
+
+This metric comes under the Measure of Evenness, that is, it compares the spatial distributions of different groups among units in a metropolitan area. Segregation is smallest when majority and
+minority populations are evenly distributed. Conceptually, dissimilarity measures the percentage of a group's population that would have to change residence for each neighborhood to have the same percentage of that group as the metropolitan area overall. 
+
+One of the most commonly used metric to measure evenness is the Dissimilarity Index. It  measures departure from evenness by taking the weighted mean absolute deviation of every unit's minority proportion from the city's minority proportion, and expressing this quantity as a proportion
+of its theoretical maximum (James & Taeuber 1985)
+ 
+> Remark: The index ranges from 0.0 (complete integration) to 1.0 (complete segregation).
+
+For example, if the dissimilarty score for a city turns out to be **X** it means that  **X %** of the minority group would need to move in order achieve a uniform distribution of population by race.  
+
+# Metrics Computation
+
+### Interaction Index for all 14 cities
+```{r echo = FALSE, message = FALSE}
+knitr::kable(int_table, format = "markdown")
+```
+
+### Isolation Index for all 14 cities
+```{r echo = FALSE, message = FALSE}
+knitr::kable(iso_table, format = "markdown")
+```
+
+> To cross check the validity of the data, we can confirm that the sum of isolation index and interaction index for each city should be equal to 1.
+
+### Dissimilarity Index for all 14 cities
+```{r echo = FALSE, message = FALSE}
+knitr::kable(dissimilarity_table, format = "markdown") 
+
+```
+
+# Metrics Comparison
+
+We obtained above the values for each of the above defined metrics for all 14 citites in our study, now we go one step further and see what these numbers actually mean in terms of **segregation**.
+
+We can start by looking at the distributions of each metric as histograms:
+
+```{r pressure, fig.align='center', echo=FALSE, message=FALSE}
+hist(interaction_df, col = "lightblue", border = "black" , xlab = "Interaction Index", main = "Histogram of Interaction Index")
+
+hist(isolation_df,  col = "lightblue", border = "black" , xlab = "Isolation Index", main = "Histogram of Isolation Index")
+
+```
+
+From the above histograms notice see that the isolation index and interaction index provide similar inferences about the segregation of cities. The histogram for Interaction index is high towards the right and has a left tail. 
+ 
+> To reiterate the meaning of interaction index, the higher the values of interaction index, the greater the possibility of interaction between a minority group memeber and a majority group member.
+
+The first chart shows that there are more cities with high interaction index ( >0.5 ) than there are with low interaction index. This proves that the majority of cities have **low levels of segregation** 
+
+We can support the above claim using the **isolation index** as well. The histogram of isolation indices show that more cities have low isolation indexes and hence face lower levels of segregation. 
+ 
+```{r, fig.align='center', echo=FALSE, message=FALSE}
+iso_plot + ggtitle("Area vs Isolation Index") + labs(x = "City", y = "Index") + geom_bar(stat="identity", fill="cyan4", colour="black") + theme(plot.title = element_text(hjust = 0.5))
+int_plot + ggtitle("Area vs Interaction Index") + labs(x = "City", y = "Index") + geom_bar(stat="identity", fill="cyan4", colour="black") + theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+The above bar charts show how the 14 cities differ from one another in terms of levels of segregation by looking at the interaction and isolation metrics. The first chart shows the isolation index for each city, and the second shows the interaction index for each city. 
+
+> From these bar charts, we can see that **Baltimore** has the highest isolation (and the lowest interaction) index, making it the most segregated city. The second most segregated city is **Chicago**. 
+> Similarly we can see that the least segregated with (with highest interaction and lowest isolation index) is **Denver**, followed by **Wichita**. 
+
+Dissimilarity Index - Now lets compare the above results with Dissimilarity Index. Lets see if our results from the two metrics (Isolation, Interaction) confirm with those of the Dissimilarity Index.
+
+To reiterate what we are triyng to observe, Dissimilarity Index means
+
+ > The index ranges from 0.0 (complete integration) to 1.0 (complete segregation), and describes the probability a group would have to move in order to maintain a uniform distibution of population. 
+
+```{r, fig.align='center', echo=FALSE, message=FALSE}
+
+hist(dissimilarity_df,  col = "lightblue", border = "black" , xlab = "Dissimilarity Index", main = "Histogram of Dissimilarity Index")
+
+dissimilarity_plot + ggtitle("Area vs Dissimilarity Index") + labs(x = "City", y = "Index") + geom_bar(stat="identity", fill="cyan4", colour="black") + theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+Lets take a deep dive into what these charts mean. In the first chart - Histogram of Dissimilarity Index - we can see that higher dissimilarity index values are more frequent than lower ones. We have a total of 8 cities with index > 0.5 and 6 cities with index lower than 0.5. Through this, we can confirm that these reults slightly **contradict** with our *initial* results that overall, more cities tend to be less segregated. 
+From the bar chart of Dissimilarity Indexes, we can see that **Milwaukee** has the highest levels of segregation, followed by **Baltimore** (which was ranked 1 in Isolation Metric). Similarly, the least segregated city, according to the dissimilarity index, is **Oklahoma City** (ok_city in data) followed by **Denver** (which was ranked 1 by the interaction index).
+
+The rankings of the dissimilairty metric are fairly coinciding with those of the Interaction and Isolation Metric. 
+
+Lets take a look at how the rankings of segregation change, when we use these three different metrics, in the table below. The table depicts an increasing level of segregation.
+
+#### Rankings
+| Interaction Index and Isolation Index           | Dissimilarity Index  |
+|---------------|:-------------:|------:|
+| Denver        | Oklahoma City |
+| Wichita            |  Denver  |
+| Oklahoma City        | Wichita    |
+| Syracuse            |  Charleston  |
+| Pittsburgh         |  Colombus   |
+| Kansas City        |  Kansas City  |
+| Colombus     |   Chicago  |
+| Charleston            | Dayton   |
+| Dayton |       Pitssburgh     |
+| Memphis            |  Syracuse  |
+| St. Louis        |  Memphis   |
+| Milwaukee            |  St. Louis  |
+| Chicago       |   Baltimore  |
+| Baltimore        |  Milwaukee   |
+
+
+Few of the major changes are - Chicago tends to be **less segregated** in the dissimilarity index, Syracuse tends to be much **more segregated** in the dissimilarity index as compared to isolation and interaction index. 
+
+But overall, we see that all three metrics are correlated to each other due to the fact that they are computed by similar variables. All of them take into account the ratios of minority and majorty populations with total population or total population of the group. None of them takes into account the area of each tract which might cause a difference in the rankings. 
+
+#### T test
+> To further see if these values are statistically different, I computed a t test of isolation and dissimlarity metrics (since interaction metric is the same as isolation). The *mean* of isolation metric is 0.489, and the mean of dissimilarity metric is 0.492. The t test gives a **p-value** of 0.9466,  with which we can conclude that the null hypothesis (that the difference in means is 0) is true.
+
+## New Metric
+
+The above metrics cover two dimensions of segregation 
+
+1. Measure of Evenness (Dissimilarity Index)
+2. Measure of Exposure (Correlation Index which is a ratio of Interaction and Isolation Index)
+
+Measure of evenness depicts the spatial distributions of minority and majority groups whereas exposure measures the level of interaction between them. I think if we combine these two measures, we can get a better idea of segregation since we can now see how both exposure and evenness of spatial distributions affect the overall segregation of a city. I am chossing this metric because it seems to be a fair point than combining the isolation metric, the dissimilarity metric, and the interaction mentric would result in a unaffected metric since the percentage of unequal distribution would likely to be less affected since the sum of isolation index and interaction index would always be 1, thus it is again measuring dissimilarity index but the values are escalated.
+
+For this I would introduce a new metric formulated below :
+
+$$ New~Metric = 0.5 \left(Correlation~Index\right) + 0.5 \left(Dissimilarity~Index\right)$$
+
+
+```{r echo=FALSE, message=FALSE}
+knitr::kable(new_table, format = "markdown")
+
+
+hist(new_df,  col = "lightblue", border = "black" , xlab = "New Metric", main = "Histogram of New Metric")
+
+new_plot + ggtitle("Area vs New Metric") + labs(x = "City", y = "Index") + theme(plot.title = element_text(hjust = 0.5)) + geom_bar(stat="identity", fill="cyan4", colour="black")
+
+```
+
+The table depicts an increasing level of segregation based on the new metric.
+
+#### Rankings
+| New Metric  | 
+|:-------------:|
+|  Oklahoma City           |  
+| Denver        | 
+| Wichita       | 
+| Charleston        | 
+| Colombus         |
+| Kansas City            |  
+| Pittsburgh     |  
+| Syracuse            | 
+| Dayton |       
+| Chicago       |
+| Memphis            |  
+| St. Louis             |
+| Milwaukee       |   
+| Baltimore        |
+
+> The results of my new metric correlates with the average of the other three metrics together, meaning the ranking is pretty similar to all the three index rankings roughly. However, I believe this metric to be stronger since it combines exposure with evenness, which makes sense since the more unevenely divided the spatial ortientaions of groups are, the lower their chances of interaction and hence more segregation.
